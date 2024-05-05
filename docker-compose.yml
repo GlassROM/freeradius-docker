@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  freeradius:
+    image: 8d0fd0430131
+    read_only: true
+    container_name: freeradius
+    user: "970:970"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    ports:
+      - "1812:1812/udp"
+      - "1812:1812/tcp"
+      - "1813:1813/udp"
+      - "1813:1813/tcp"
+    volumes:
+      - type: bind
+        source: /var/log/radius
+        target: /var/log/radius
+        bind:
+          selinux: z
+      - type: bind
+        source: /etc/raddb/certs/server.crt
+        target: /etc/raddb/certs/server.crt
+        read_only: true
+        bind:
+          selinux: z
+      - type: bind
+        source: /etc/raddb/certs/server.pem
+        target: /etc/raddb/certs/server.pem
+        read_only: true
+        bind:
+          selinux: z
+      - type: bind
+        source: /etc/raddb/certs/ca.pem
+        target: /etc/raddb/certs/ca.pem
+        read_only: true
+        bind:
+          selinux: z
+      - type: bind
+        source: /etc/raddb/clients.conf
+        target: /etc/raddb/clients.conf
+        read_only: true
+        bind:
+          selinux: z
+      # gvisor DNS fixup
+      - type: bind
+        source: /etc/resolv.conf
+        target: /etc/resolv.conf
+        read_only: true
+        bind:
+          selinux: z
+    tmpfs:
+      - /tmp
+    restart: always
+    sysctls:
+      - net.ipv4.conf.all.rp_filter=1
+      - net.ipv4.conf.all.accept_source_route=0
+      - kernel.yama.ptrace_scope=1
+      - vm.max_map_count=1048576
+    networks:
+      - freeradius_net
+    runtime: runsc
+
+networks:
+  freeradius_net:
