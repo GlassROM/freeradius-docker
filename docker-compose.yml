@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   freeradius:
-    image: 8d0fd0430131
+    image: 186f138a421c
     read_only: true
     container_name: freeradius
     user: "970:970"
@@ -15,6 +15,7 @@ services:
       - "1812:1812/tcp"
       - "1813:1813/udp"
       - "1813:1813/tcp"
+    pull_policy: never
     volumes:
       - type: bind
         source: /var/log/radius
