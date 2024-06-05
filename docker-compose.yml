@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   freeradius:
-    image: 186f138a421c
+    image: 9a396a43e27cb330c9c32e1b0df08a53a785d59e6c2139396601943bf5f1a559
     read_only: true
     container_name: freeradius
     user: "970:970"
@@ -48,7 +48,7 @@ services:
           selinux: z
       # gvisor DNS fixup
       - type: bind
-        source: /etc/resolv.conf
+        source: /etc/resolv-container.conf
         target: /etc/resolv.conf
         read_only: true
         bind:

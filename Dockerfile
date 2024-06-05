@@ -1,18 +1,11 @@
-FROM archlinux:latest
+FROM tejctcznrtamwvvfecrocsnimmnxqgazpchlcgejjfghbwosrbgfbdkybmmy
 
 #LABEL maintainer=""
-
-COPY pacman.conf /etc/pacman.conf
 
 RUN set -x \
     && groupadd --system --gid 970 radiusd \
     && useradd --system -g radiusd -M --shell /bin/nologin --uid 970 radiusd \
-    && pacman -Syyuu --noconfirm \
-    && pacman -Syyuu --noconfirm base freeradius git
-
-# Building inside docker is a mess. Build your own hardened malloc git version outside the container and supply it here
-COPY hmalloc.pkg.tar /
-RUN pacman -U --noconfirm hmalloc.pkg.tar
+    && pacman -Syyuu --noconfirm --needed base freeradius git
 
 USER root
 WORKDIR /
@@ -25,11 +18,7 @@ RUN git reset --hard
 RUN git clean -f
 
 
-RUN pacman -Rcns git --noconfirm \
-    && pacman -Qdtq --noconfirm | pacman -Rs - --noconfirm \
-    && pacman -Sc --noconfirm
-
-RUN echo '/usr/lib/libhardened_malloc.so' | tee -a /etc/ld.so.preload
+RUN yes | pacman -Scc
 
 WORKDIR /etc/raddb
 
