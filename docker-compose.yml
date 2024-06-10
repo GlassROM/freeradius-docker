@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   freeradius:
-    image: 9a396a43e27cb330c9c32e1b0df08a53a785d59e6c2139396601943bf5f1a559
+    image: 99a2e9747849d48be3f94411920e91e54088105fa9ff14313bbd9c7a08dd7499
     read_only: true
     container_name: freeradius
     user: "970:970"
@@ -48,7 +48,7 @@ services:
           selinux: z
       # gvisor DNS fixup
       - type: bind
-        source: /etc/resolv-container.conf
+        source: /etc/resolv-container-freeradius.conf
         target: /etc/resolv.conf
         read_only: true
         bind:
@@ -56,14 +56,40 @@ services:
     tmpfs:
       - /tmp
     restart: always
+    depends_on:
+      - unbound-freeradius
     sysctls:
       - net.ipv4.conf.all.rp_filter=1
       - net.ipv4.conf.all.accept_source_route=0
-      - kernel.yama.ptrace_scope=1
+      - kernel.yama.ptrace_scope=3
       - vm.max_map_count=1048576
     networks:
       - freeradius_net
     runtime: runsc
 
+  unbound-freeradius:
+    runtime: runsc
+    image: 16f89696db27eb4e0c3874e7020f6a5c727350e3e6ac3ac87c94010cc003f688
+    read_only: true
+    container_name: unbound-freeradius
+    user: "970:970"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    tmpfs:
+      - /tmp
+    restart: always
+    pull_policy: never
+    networks:
+      freeradius_net:
+        ipv4_address: 172.19.0.2
+
 networks:
   freeradius_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.19.0.0/16
+          gateway: 172.19.0.1

@@ -1,11 +1,13 @@
-FROM tejctcznrtamwvvfecrocsnimmnxqgazpchlcgejjfghbwosrbgfbdkybmmy
+FROM owhkgvcvbahevhhqftnedviazgxpvcovcesrqhcvwpzjzherwthhpjmyulworhypgw
 
 #LABEL maintainer=""
+
+RUN pacman-key --init && pacman-key --populate archlinux
 
 RUN set -x \
     && groupadd --system --gid 970 radiusd \
     && useradd --system -g radiusd -M --shell /bin/nologin --uid 970 radiusd \
-    && pacman -Syyuu --noconfirm --needed base freeradius git
+    && pacman -S --noconfirm --needed base freeradius git
 
 USER root
 WORKDIR /
@@ -20,6 +22,8 @@ RUN git clean -f
 
 RUN yes | pacman -Scc
 
+RUN rm -rf /etc/pacman.d/gnupg
+
 WORKDIR /etc/raddb
 
 EXPOSE 1812/tcp 1812/udp 1813/tcp 1813/udp
@@ -30,4 +34,4 @@ RUN chown -R radiusd:radiusd /etc/raddb
 RUN rm -rf /freeradius-config /etc/raddb/.git /etc/raddb/certs/.git /etc/raddb/.gitignore
 USER radiusd
 
-CMD ["/usr/bin/radiusd", "-d", "/etc/raddb", "-f"]
+CMD ["/seccomp-strict", "/usr/bin/radiusd", "-d", "/etc/raddb", "-f"]
