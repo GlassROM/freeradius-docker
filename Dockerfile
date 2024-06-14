@@ -1,4 +1,4 @@
-FROM owhkgvcvbahevhhqftnedviazgxpvcovcesrqhcvwpzjzherwthhpjmyulworhypgw
+FROM ghcr.io/glassrom/os-image-docker:latest
 
 #LABEL maintainer=""
 
