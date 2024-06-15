@@ -19,7 +19,7 @@ RUN git config --global --add safe.directory /etc/raddb
 RUN git reset --hard
 RUN git clean -f
 
-
+RUN pacman -Rscn --noconfirm git
 RUN yes | pacman -Scc
 
 RUN rm -rf /etc/pacman.d/gnupg
