@@ -1,4 +1,4 @@
-FROM ghcr.io/glassrom/os-image-docker:master
+FROM ghcr.io/glassrom/os-image-updater:master
 
 #LABEL maintainer=""
 
