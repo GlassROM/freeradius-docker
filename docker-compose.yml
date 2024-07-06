@@ -65,10 +65,10 @@ services:
       - vm.max_map_count=1048576
     networks:
       - freeradius_net
-    runtime: runsc
+    runtime: runsc-overlay
 
   unbound-freeradius:
-    runtime: runsc
+    runtime: runsc-overlay
     image: ghcr.io/glassrom/dns-docker:master
     read_only: true
     container_name: unbound-freeradius
