@@ -77,6 +77,10 @@ services:
       - no-new-privileges:true
     cap_drop:
       - ALL
+    cap_add:
+      - CAP_NET_BIND_SERVICE
+      - CAP_SYS_RESOURCE
+      - CAP_NET_RAW
     tmpfs:
       - /tmp
     restart: always
