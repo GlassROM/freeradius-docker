@@ -60,7 +60,7 @@ services:
       - unbound-freeradius
     networks:
       - freeradius_net
-    runtime: runsc-overlay
+    runtime: runsc-overlay-host-network
 
   unbound-freeradius:
     runtime: runsc-overlay-host-network
