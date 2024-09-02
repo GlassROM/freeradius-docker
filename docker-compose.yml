@@ -58,11 +58,6 @@ services:
     restart: always
     depends_on:
       - unbound-freeradius
-    sysctls:
-      - net.ipv4.conf.all.rp_filter=1
-      - net.ipv4.conf.all.accept_source_route=0
-      - kernel.yama.ptrace_scope=2
-      - vm.max_map_count=1048576
     networks:
       - freeradius_net
     runtime: runsc-overlay
