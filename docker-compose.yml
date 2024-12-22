@@ -54,7 +54,7 @@ services:
         bind:
           selinux: z
     tmpfs:
-      - /tmp
+      - /tmp:nosuid,nodev,noexec
     restart: always
     depends_on:
       - unbound-freeradius
@@ -77,7 +77,7 @@ services:
       - CAP_SYS_RESOURCE
       - CAP_NET_RAW
     tmpfs:
-      - /tmp
+      - /tmp:nosuid,nodev,noexec
     restart: always
     pull_policy: always
     networks:
