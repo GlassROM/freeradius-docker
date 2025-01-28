@@ -18,11 +18,6 @@ services:
     pull_policy: always
     volumes:
       - type: bind
-        source: /var/log/radius
-        target: /var/log/radius
-        bind:
-          selinux: z
-      - type: bind
         source: /etc/raddb/certs/server.crt
         target: /etc/raddb/certs/server.crt
         read_only: true
@@ -55,6 +50,7 @@ services:
           selinux: z
     tmpfs:
       - /tmp:nosuid,nodev,noexec
+      - /var/log/radius:nosuid,nodev,noexec,uid=970,gid=970,size=1G
     restart: always
     depends_on:
       - unbound-freeradius
