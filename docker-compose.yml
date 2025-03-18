@@ -56,10 +56,10 @@ services:
       - unbound-freeradius
     networks:
       - freeradius_net
-    runtime: runsc-overlay-host-network
+    runtime: runsc-overlay-host-network-nodirectfs
 
   unbound-freeradius:
-    runtime: runsc-overlay-host-network
+    runtime: runsc-overlay-host-network-nodirectfs
     image: ghcr.io/glassrom/dns-docker:master
     read_only: true
     container_name: unbound-freeradius
