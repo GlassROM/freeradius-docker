@@ -32,6 +32,12 @@ STOPSIGNAL SIGQUIT
 
 RUN chown -R radiusd:radiusd /etc/raddb
 RUN rm -rf /freeradius-config /etc/raddb/.git /etc/raddb/certs/.git /etc/raddb/.gitignore
+RUN mkdir -p /var/log/radius \
+ && rm -f /var/log/radius/radius.log \
+ && touch /var/log/radius/radius.log \
+ && chown -R radiusd:radiusd /var/log/radius \
+ && chmod -R 755 /var/log/radius \
+ && ln -sf /dev/stdout /var/log/radius/radius.log
 USER radiusd
 
 CMD ["/seccomp-strict", "/usr/bin/radiusd", "-d", "/etc/raddb", "-f"]

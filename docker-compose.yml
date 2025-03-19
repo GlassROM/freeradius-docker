@@ -50,7 +50,6 @@ services:
           selinux: z
     tmpfs:
       - /tmp:nosuid,nodev,noexec
-      - /var/log/radius:nosuid,nodev,noexec,uid=970,gid=970,size=1G
     restart: always
     depends_on:
       - unbound-freeradius
