@@ -1,5 +1,7 @@
 FROM ghcr.io/glassrom/os-image-updater:master
 
+RUN mv /etc/ld.so.preload /etc/ld.so.preload.bak
+
 #LABEL maintainer=""
 
 RUN pacman-key --init && pacman-key --populate archlinux
@@ -23,6 +25,8 @@ RUN pacman -Rscn --noconfirm git
 RUN yes | pacman -Scc
 
 RUN rm -rf /etc/pacman.d/gnupg
+
+RUN mv /etc/ld.so.preload.bak /etc/ld.so.preload
 
 WORKDIR /etc/raddb
 
